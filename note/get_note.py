@@ -1,17 +1,17 @@
 from flask import request, jsonify
-from models.user import User
+from models.note import Note
 from note import bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
-@bp.get('/test')
+@bp.get('/get')
 @jwt_required()
-def test():
-    user_id = get_jwt_identity()
-    user = User.query.filter_by(id=user_id).first()
+def get_note():
+    rq = request.json.to_dict()
+    note = Note.query.filter_by(id=rq["id"]).first()
 
     # Check if user exists
-    if user:
-        return jsonify({'message': 'User found', 'name': user.username})
+    if note:
+        return jsonify({'title': note.title, 'body': note.body})
     else:
         return jsonify({'message': 'User not found'}), 404

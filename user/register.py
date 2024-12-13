@@ -7,6 +7,9 @@ from argon2 import PasswordHasher
 @bp.post('/register')
 def register_user():
     # TODO: password validation
+    # TODO: username validation and uniqueness check
+    # TODO: involve email in signup
+    # TODO: accept form or json input
     rq = request.form.to_dict()
     hasher = PasswordHasher()
     hashed = hasher.hash(rq['password'])
