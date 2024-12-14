@@ -16,9 +16,8 @@ def create_app(config = Config):
 
     @app.route('/init-database')
     def test():
-        # from models.user import User
-        db.drop_all()
-        db.create_all()
+        from init_database import init_db
+        init_db()
         return 'created database'
 
     return app
