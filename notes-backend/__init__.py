@@ -21,3 +21,7 @@ def create_app(config = Config):
         return 'created database'
 
     return app
+
+if __name__ == '__main__':
+    # test comment
+    create_app().run()
