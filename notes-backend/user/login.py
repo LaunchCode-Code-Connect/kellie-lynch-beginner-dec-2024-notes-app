@@ -8,6 +8,7 @@ from flask_jwt_extended import create_access_token
 @bp.post('/login')
 def login_user():
     rq = request.form.to_dict()
+    print(rq)
     user = User.query.filter_by(username=rq['username']).first()
     hasher = PasswordHasher()
     # TODO: review exception handling
