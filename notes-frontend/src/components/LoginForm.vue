@@ -7,13 +7,13 @@ async function onSubmit(){
   const formData = new FormData();
   formData.append("username", username.value);
   formData.append("password", password.value);
-  const res = await fetch("http://127.0.0.1:5000/user/login", {
+  console.log(import.meta.env.VITE_API_BASE_URL)
+  const res = await fetch(import.meta.env.VITE_API_BASE_URL + "/user/login", {
     method: "POST",
     mode: "cors",
     body: formData})
     .then(res => res.json());
   $cookies.set("notes-app-token", res["token"]);
-  console.log($cookies.get("notes-app-token"));
 }
 </script>
 
@@ -30,7 +30,7 @@ async function onSubmit(){
       required
     />
     <v-btn type="submit">
-      Submit
+      Login
     </v-btn>
   </v-form>
 </template>
