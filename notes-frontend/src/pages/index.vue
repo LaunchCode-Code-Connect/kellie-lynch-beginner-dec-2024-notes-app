@@ -2,23 +2,27 @@
   <v-layout class="rounded rounded-md">
     <v-app-bar title="Application bar">
       <v-menu
+        v-model="loginMenu"
         :close-on-content-click="false"
       >
         <template #activator="{ props }">
           <v-btn
-            v-if="!isLoggedIn"
+            v-if="!(userStore.isLoggedIn === true)"
             v-bind="props"
           >
-            Login
+            {{ userStore.isLoggedIn }}
           </v-btn>
           <v-btn
             v-else
+            @click="userStore.logout"
           >
-            Logout
+            {{ userStore.isLoggedIn }}
           </v-btn>
         </template>
-        <v-card min-width="300">
-          <LoginForm />
+        <v-card
+          min-width="300"
+        >
+          <LoginForm @submit-form="loginMenu=false" />
         </v-card>
       </v-menu>
     </v-app-bar>
@@ -39,8 +43,14 @@
 </template>
 
 <script setup>
-  //
-import LoginForm from "@/components/LoginForm.vue";
-import {useCookies} from "@/composables/cookies.js";
-const isLoggedIn = useCookies().get("notes-app-token");
+
+  import LoginForm from "@/components/LoginForm.vue";
+  import {useUserStore} from "@/stores/user.js";
+  import { ref } from "vue";
+  import { useCookies } from "@/composables/cookies.js";
+
+  const userStore = useUserStore();
+  const loginMenu = ref(false);
+  console.log(useCookies().get("notes-app-token"));
+
 </script>
