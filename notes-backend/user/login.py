@@ -1,5 +1,6 @@
+import datetime
 import argon2.exceptions
-from flask import request, jsonify
+from flask import request, jsonify, current_app
 from models.user import User
 from user import bp
 from argon2 import PasswordHasher
@@ -20,5 +21,6 @@ def login_user():
         return jsonify({'message': 'Login failed'}), 401
 
     token = create_access_token(identity=user.id, additional_claims={'sub': str(user.id)})
+    expiry = str(datetime.datetime.now() + current_app.config["JWT_ACCESS_TOKEN_EXPIRES"])
 
-    return jsonify({'message': 'Login successful', 'token': token}), 200
+    return jsonify({'message': 'Login successful', 'token': token, 'expiry': expiry}), 200

@@ -14,7 +14,8 @@ async function onSubmit(){
     mode: "cors",
     body: formData})
     .then(res => res.json());
-  useUserStore().login(res["token"]);
+  const store = useUserStore();
+  store.login(res["token"], Date.parse(res["expiry"]));
 }
 </script>
 
