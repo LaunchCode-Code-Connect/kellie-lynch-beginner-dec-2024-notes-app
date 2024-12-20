@@ -8,7 +8,6 @@ export const useUserStore = defineStore('user', () =>{
   const [str, exp] = getTokenFromCookies();
   const tokenString = ref(str);
   const tokenExpiry = ref(exp)
-  // const isLoggedIn = ref(loggedIn);
   function getTokenFromCookies() {
     const tokenStr = $cookies.get('notes-app-token-string');
     const tokenExp = $cookies.get('notes-app-token-expiry');
@@ -18,6 +17,7 @@ export const useUserStore = defineStore('user', () =>{
     return tokenString.value !== null && tokenExpiry.value !== null && parseInt(tokenExpiry.value) > Date.now();
   })
   function login (tk, expiry) {
+    console.log("setting", tk, expiry);
     tokenString.value = tk;
     tokenExpiry.value = expiry;
     $cookies.set('notes-app-token-string', tk);

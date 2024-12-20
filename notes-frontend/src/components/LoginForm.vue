@@ -1,21 +1,23 @@
 <script setup>
-import {useUserStore} from "@/stores/user.js";
+import { useUserStore } from "@/stores/user.js";
+import { useFetchFromApi } from "@/composables/fetchFromApi.js";
 
 const emit = defineEmits(["submitForm"]);
 const username = defineModel("username", {type: Text});
 const password = defineModel("password", {type: Text});
+const {fetchData} = useFetchFromApi();
 async function onSubmit(){
   emit("submitForm");
   const formData = new FormData();
   formData.append("username", username.value);
   formData.append("password", password.value);
-  const res = await fetch(import.meta.env.VITE_API_BASE_URL + "/user/login", {
-    method: "POST",
-    mode: "cors",
-    body: formData})
-    .then(res => res.json());
+
   const store = useUserStore();
-  store.login(res["token"], Date.parse(res["expiry"]));
+
+  await fetchData("/user/login", "POST", undefined, undefined, formData)
+    .then(res => {
+      store.login(res.value["token"], Date.parse(res.value["expiry"]))
+    });
 }
 </script>
 

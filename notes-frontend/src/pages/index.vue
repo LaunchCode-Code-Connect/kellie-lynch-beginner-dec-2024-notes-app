@@ -10,13 +10,13 @@
             v-if="!(userStore.isLoggedIn === true)"
             v-bind="props"
           >
-            {{ userStore.isLoggedIn }}
+            Login
           </v-btn>
           <v-btn
             v-else
             @click="userStore.logout"
           >
-            {{ userStore.isLoggedIn }}
+            Logout
           </v-btn>
         </template>
         <v-card
@@ -29,7 +29,11 @@
 
     <v-navigation-drawer>
       <v-list>
-        <v-list-item title="Navigation drawer"></v-list-item>
+        <NoteListItem
+          v-for="note in userNotes"
+          :key="note.id"
+          :note="note"
+        />
       </v-list>
     </v-navigation-drawer>
 
@@ -37,7 +41,6 @@
       class="d-flex align-center justify-center"
       style="min-height: 300px;"
     >
-
     </v-main>
   </v-layout>
 </template>
@@ -46,11 +49,26 @@
 
   import LoginForm from "@/components/LoginForm.vue";
   import {useUserStore} from "@/stores/user.js";
-  import { ref } from "vue";
-  import { useCookies } from "@/composables/cookies.js";
+  import { ref, onMounted } from "vue";
+  import NoteListItem from "@/components/NoteListItem.vue";
+  import { useFetchFromApi } from "@/composables/fetchFromApi.js";
+  import Note from "@/models/Note.js"
 
   const userStore = useUserStore();
   const loginMenu = ref(false);
-  console.log(useCookies().get("notes-app-token"));
+  const userNotes = ref([]);
+
+  onMounted(async () => {
+    if (userStore.isLoggedIn === true) {
+      const { fetchData } = useFetchFromApi();
+      await fetchData("/note/notes", "GET", true)
+        .then(notes => {
+          for (const note of notes.value) {
+            userNotes.value.push(new Note(note));
+          }
+        });
+
+    }
+  })
 
 </script>
