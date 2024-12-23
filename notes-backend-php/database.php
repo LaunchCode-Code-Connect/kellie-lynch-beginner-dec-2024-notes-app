@@ -4,7 +4,7 @@ $port = "3306";
 $dbname = "db";
 $username = "db";
 $password = "db";
-$conn = null;
+global $conn;
 
 try {
     $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $username, $password);

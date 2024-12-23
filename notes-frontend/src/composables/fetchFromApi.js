@@ -3,8 +3,9 @@ import {useUserStore} from "@/stores/user.js";
 
 
 
-const userStore = useUserStore();
+
 export function useFetchFromApi() {
+  const userStore = useUserStore();
   const data = ref(null);
   const loading = ref(false);
   const error = ref(null);
@@ -12,7 +13,9 @@ export function useFetchFromApi() {
     loading.value = true;
     const url = import.meta.env.VITE_API_BASE_URL + endpoint;
     if (auth) {
+      console.log("checking logged in tokenString", userStore.tokenString)
       if (userStore.isLoggedIn) {
+        console.log("logged in")
         headers['Authorization'] = `Bearer ${userStore.tokenString}`;
       }
     }
@@ -24,6 +27,7 @@ export function useFetchFromApi() {
     if (method !== 'GET') {
       params.body = body
     }
+    console.log("request params", params)
     try{
       const response = await fetch(url, params)
       data.value = await response.json();
@@ -32,7 +36,7 @@ export function useFetchFromApi() {
     } finally {
       loading.value = false;
     }
-    return data;
+    // return data;
   }
 
   return{

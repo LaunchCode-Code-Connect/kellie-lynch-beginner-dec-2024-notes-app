@@ -30,7 +30,7 @@
     <v-navigation-drawer>
       <v-list>
         <NoteListItem
-          v-for="note in userNotes"
+          v-for="note in userStore.notes"
           :key="note.id"
           :note="note"
         />
@@ -49,26 +49,25 @@
 
   import LoginForm from "@/components/LoginForm.vue";
   import {useUserStore} from "@/stores/user.js";
-  import { ref, onMounted } from "vue";
+  import { ref } from "vue";
   import NoteListItem from "@/components/NoteListItem.vue";
-  import { useFetchFromApi } from "@/composables/fetchFromApi.js";
-  import Note from "@/models/Note.js"
+
 
   const userStore = useUserStore();
   const loginMenu = ref(false);
-  const userNotes = ref([]);
 
-  onMounted(async () => {
-    if (userStore.isLoggedIn === true) {
-      const { fetchData } = useFetchFromApi();
-      await fetchData("/note/notes", "GET", true)
-        .then(notes => {
-          for (const note of notes.value) {
-            userNotes.value.push(new Note(note));
-          }
-        });
-
-    }
-  })
+  // onMounted(async () => {
+  //   if (userStore.isLoggedIn === true) {
+  //     const { fetchData } = useFetchFromApi();
+  //     console.log('logged in in onMounted', userStore.isLoggedIn);
+  //     await fetchData("/note/notes", "GET", true)
+  //       .then(notes => {
+  //         for (const note of notes.value) {
+  //           userNotes.value.push(new Note(note));
+  //         }
+  //       });
+  //
+  //   }
+  // })
 
 </script>
