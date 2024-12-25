@@ -17,7 +17,7 @@ def init_db():
     db.session.add(user2)
     db.session.commit()
     note1 = Note(title="Test Note", body="Test Note", user_id=user1.id)
-    note2 = Note(title="Lorem ipsum", body="Lorem ipsum dolor sit amet", user_id=user1.id)
+    note2 = Note(title="Lorem ipsum", body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", user_id=user1.id)
     note3 = Note(title="I am not kellie", body="Why does everyone think I'm kellie?", user_id=user2.id)
     db.session.add(note1)
     db.session.add(note2)

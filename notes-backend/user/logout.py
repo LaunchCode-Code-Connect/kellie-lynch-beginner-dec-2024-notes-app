@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import jsonify
 from extensions import jwt, db
 from models.token import Token
@@ -9,7 +10,9 @@ from flask_jwt_extended import jwt_required, get_jwt, get_jwt_header
 @jwt_required()
 def logout():
     identity = get_jwt()
-    token = Token(jti=identity["jti"], expires_at=identity["exp"])
+    # exp = datetime.strptime(identity['exp'], '%Y-%m-%d %H:%M:%S.%f')
+    exp = datetime.fromtimestamp(identity['exp'])
+    token = Token(jti=identity["jti"], expires_at=exp)
     db.session.add(token)
     db.session.commit()
     return jsonify({"message": f"Logged out user {token.jti}"})

@@ -1,11 +1,14 @@
 <template>
   <v-app>
+    <AppHeaderBar />
     <v-main>
-      <router-view />
+      <NotesManager />
     </v-main>
   </v-app>
 </template>
 
 <script setup>
-  
+
+import AppHeaderBar from "@/components/AppHeaderBar.vue";
+import NotesManager from "@/components/NotesManager.vue";
 </script>

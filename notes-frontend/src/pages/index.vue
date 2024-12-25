@@ -1,73 +1,33 @@
-<template>
-  <v-layout class="rounded rounded-md">
-    <v-app-bar title="Application bar">
-      <v-menu
-        v-model="loginMenu"
-        :close-on-content-click="false"
-      >
-        <template #activator="{ props }">
-          <v-btn
-            v-if="!(userStore.isLoggedIn === true)"
-            v-bind="props"
-          >
-            Login
-          </v-btn>
-          <v-btn
-            v-else
-            @click="userStore.logout"
-          >
-            Logout
-          </v-btn>
-        </template>
-        <v-card
-          min-width="300"
-        >
-          <LoginForm @submit-form="loginMenu=false" />
-        </v-card>
-      </v-menu>
-    </v-app-bar>
-
-    <v-navigation-drawer>
-      <v-list>
-        <NoteListItem
-          v-for="note in userStore.notes"
-          :key="note.id"
-          :note="note"
-        />
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-main
-      class="d-flex align-center justify-center"
-      style="min-height: 300px;"
-    >
-    </v-main>
-  </v-layout>
-</template>
-
 <script setup>
+import { ref } from "vue";
+import NotesList from "@/components/NotesList.vue";
+import NoteEditor from "@/components/NoteEditor.vue";
+import Note from "@/models/Note.js";
 
-  import LoginForm from "@/components/LoginForm.vue";
-  import {useUserStore} from "@/stores/user.js";
-  import { ref } from "vue";
-  import NoteListItem from "@/components/NoteListItem.vue";
-
-
-  const userStore = useUserStore();
-  const loginMenu = ref(false);
-
-  // onMounted(async () => {
-  //   if (userStore.isLoggedIn === true) {
-  //     const { fetchData } = useFetchFromApi();
-  //     console.log('logged in in onMounted', userStore.isLoggedIn);
-  //     await fetchData("/note/notes", "GET", true)
-  //       .then(notes => {
-  //         for (const note of notes.value) {
-  //           userNotes.value.push(new Note(note));
-  //         }
-  //       });
-  //
-  //   }
-  // })
+const currentNote = ref(null);
 
 </script>
+
+<template>
+  <v-card
+    max-width="300"
+    min-width="300"
+    width="300"
+    location="left"
+  >
+    <NotesList
+      @select-note="(n) => currentNote = n"
+    />
+  </v-card>
+  <v-card
+    class="w-100 h-100"
+  >
+    <NoteEditor
+      :note="currentNote"
+    />
+  </v-card>
+</template>
+
+<style scoped lang="sass">
+
+</style>
