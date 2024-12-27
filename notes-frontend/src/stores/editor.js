@@ -6,6 +6,8 @@ import Note from "@/models/Note.js";
 const notesApi = useNotesApi();
 
 export const useEditorStore = defineStore('editor', () => {
+  // const private = usePrivateEditorStore()
+
   const notes = useStorage('notes', [], undefined, {
     serializer: {
       read: (v) => {
@@ -18,11 +20,12 @@ export const useEditorStore = defineStore('editor', () => {
         return converted;
       },
       write: (v) => {
+        console.log("notes storage object is being updated", v)
         return v ? JSON.stringify(v) : []
       }
     }
   });
-  // const notes = useStorage('notes', []);
+
   const openNote = useStorage('openNote', null, undefined, {
     serializer: {
       read: (v) => {
@@ -32,12 +35,31 @@ export const useEditorStore = defineStore('editor', () => {
         return new Note(j);
       },
       write: (v) => {
-        return v ? JSON.stringify(v) : []
+        console.log("openNote storage object is being updated", v)
+        return v ? JSON.stringify(v) : null
       }
     }
   });
 
-  // const openNote = useStorage('openNote', null);
+  const noteHasChanged = (note) => {
+    console.log("in noteHasChanged, note is", note, "notes are", notes)
+
+    for (const n of notes.value) {
+      if (n.id === note.id){
+        console.log("are they the same object", n === note);
+        return note.title !== n.title || note.body !== n.body;
+      }
+    }
+    return true;
+  }
+
+  async function saveNote(note) {
+    console.log("noteHasChanged returns", noteHasChanged(note))
+    if(noteHasChanged(note)){
+      await notesApi.updateNote(note)
+    }
+    // TODO: ASAP, FIGURE OUT HOW TO UPDATE notes AFTER API CALL
+  }
 
   async function getNotes() {
     notes.value = await notesApi.getNotesForLoggedInUser();
@@ -48,5 +70,9 @@ export const useEditorStore = defineStore('editor', () => {
     openNote.value = null;
   }
 
-  return { notes, openNote, getNotes, $reset };
+  return { notes, openNote, noteHasChanged, saveNote, getNotes, $reset };
 })
+
+// const usePrivateEditorStore = defineStore('editorPrivate', () => {
+//   const openNoteId = useStorage('openNoteId', null)
+// })

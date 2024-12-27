@@ -34,7 +34,7 @@ export const useUserStore = defineStore('user', () =>{
         await editorStore.getNotes();
       }
     });
-    await fetchData("/user/login", "POST", undefined, undefined, formData);
+    await fetchData("/user/login", "POST", false, undefined, formData);
   }
 
   async function logout () {
@@ -44,7 +44,7 @@ export const useUserStore = defineStore('user', () =>{
       // TODO: resetting data stores should happen before logout api call, but that will require
       //  modifying the fetchData method to accept an override token value
     })
-    await fetchData("/user/logout", "POST", true );
+    await fetchData("/user/logout", "POST" );
   }
 
   function $reset () {

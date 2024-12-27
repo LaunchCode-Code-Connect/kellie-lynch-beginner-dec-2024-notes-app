@@ -7,8 +7,8 @@ import Note from "@/models/Note.js";
 import { storeToRefs } from "pinia";
 
 const editor = useEditorStore();
-defineEmits(['selectNote'])
-console.log("open note", editor.openNote)
+// defineEmits(['selectNote'])
+// console.log("open note", editor.openNote)
 
 
 </script>
@@ -21,7 +21,6 @@ console.log("open note", editor.openNote)
       v-for="note in editor.notes"
       :key="note.id"
       :note="note"
-      @click="$emit('selectNote', note)"
     />
   </v-list>
 </template>

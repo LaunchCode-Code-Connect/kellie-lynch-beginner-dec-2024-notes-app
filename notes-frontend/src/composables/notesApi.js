@@ -15,9 +15,20 @@ export function useNotesApi(){
         }
       }
     });
-    await fetchData("/note/notes", "GET", true);
+    await fetchData("/note/notes", "GET");
     return notes;
   }
 
-  return { getNotesForLoggedInUser };
+  async function addNote(newNote) {}
+
+  async function updateNote(note) {
+    const {data, loading, fetchData } = useFetchFromApi();
+    const parsed = JSON.parse(JSON.stringify(note));
+    parsed.user_id = parsed.author;
+    delete parsed.author;
+
+    await fetchData(`/note/${note.id}`, "PUT", undefined, undefined, JSON.stringify(parsed))
+  }
+
+  return { getNotesForLoggedInUser, updateNote };
 }

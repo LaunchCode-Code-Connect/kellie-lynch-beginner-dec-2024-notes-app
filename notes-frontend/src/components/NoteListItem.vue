@@ -10,6 +10,10 @@ const { note } = defineProps({
     default: null
   } });
 
+function setOpenNote(note) {
+  editorStore.openNote = new Note(note);
+}
+
 // console.log("openNote conditions", editorStore.openNote != null, note.id === editorStore.openNote.id)
 
 </script>
@@ -21,7 +25,7 @@ const { note } = defineProps({
     :title="note.title"
     :subtitle="note.body"
     :active="editorStore.openNote && editorStore.openNote.id === note.id"
-    @click="editorStore.openNote = note"
+    @click="setOpenNote(note)"
   >
     <template #append>
       <v-btn icon="mdi-dots-vertical" />

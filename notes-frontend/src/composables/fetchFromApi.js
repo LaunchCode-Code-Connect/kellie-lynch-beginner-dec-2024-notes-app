@@ -7,7 +7,7 @@ export function useFetchFromApi() {
   const data = ref(null);
   const loading = ref(false);
   const error = ref(null);
-  async function fetchData (endpoint, method, auth=false, headers={}, body={}) {
+  async function fetchData (endpoint, method, auth=true, headers={}, body={}) {
     loading.value = true;
     const url = import.meta.env.VITE_API_BASE_URL + endpoint;
     if (auth) {
@@ -21,6 +21,10 @@ export function useFetchFromApi() {
       headers: headers,
     }
     if (method !== 'GET') {
+      if (!(body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+      }
+
       params.body = body
     }
     try{
